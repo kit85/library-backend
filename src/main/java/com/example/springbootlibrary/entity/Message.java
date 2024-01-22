@@ -29,10 +29,14 @@ public class Message {
     @Column(name = "closed")
     private boolean closed;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Message() {
     }
 
-    public Message(Long id, String userEmail, String title, String question, String adminEmail, String response, boolean closed) {
+    public Message(Long id, String userEmail, String title, String question, String adminEmail, String response, boolean closed, User user) {
         this.id = id;
         this.userEmail = userEmail;
         this.title = title;
@@ -40,6 +44,7 @@ public class Message {
         this.adminEmail = adminEmail;
         this.response = response;
         this.closed = closed;
+        this.user = user;
     }
 
     public Long getId() {
@@ -98,6 +103,14 @@ public class Message {
         this.closed = closed;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -108,6 +121,7 @@ public class Message {
                 ", adminEmail='" + adminEmail + '\'' +
                 ", response='" + response + '\'' +
                 ", closed=" + closed +
+                ", user=" + user +
                 '}';
     }
 }

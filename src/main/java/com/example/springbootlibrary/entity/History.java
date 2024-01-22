@@ -30,17 +30,21 @@ public class History {
     private String description;
 
     @Lob
-    @Column(name = "img")
+    @Column(name = "img", columnDefinition = "MEDIUMBLOB" )
     private String img;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public History() {
     }
 
-    public History(Long id, String userEmail, String checkoutDate, String returnedDate, String title, String author, String description, String img, Book book) {
+    public History(Long id, String userEmail, String checkoutDate, String returnedDate, String title, String author, String description, String img, Book book, User user) {
         this.id = id;
         this.userEmail = userEmail;
         this.checkoutDate = checkoutDate;
@@ -50,6 +54,7 @@ public class History {
         this.description = description;
         this.img = img;
         this.book = book;
+        this.user = user;
     }
 
     public Long getId() {
@@ -124,6 +129,14 @@ public class History {
         this.book = book;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "History{" +
@@ -136,6 +149,7 @@ public class History {
                 ", description='" + description + '\'' +
                 ", img='" + img + '\'' +
                 ", book=" + book +
+                ", user=" + user +
                 '}';
     }
 }

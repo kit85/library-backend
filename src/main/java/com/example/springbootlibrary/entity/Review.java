@@ -2,9 +2,15 @@ package com.example.springbootlibrary.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
+
+import jakarta.persistence.*;
+import java.util.Date;
+
 @Entity
-@Table(name="checkout")
-public class Checkout {
+@Table(name = "review")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,11 +19,15 @@ public class Checkout {
     @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "checkout_date")
-    private String checkoutDate;
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
-    @Column(name = "return_date")
-    private String returnDate;
+    @Column(name = "rating")
+    private int rating;
+
+    @Column(name = "review_description", columnDefinition = "text")
+    private String reviewDescription;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
@@ -28,15 +38,15 @@ public class Checkout {
     private User user;
 
 
-
-    public Checkout() {
+    public Review() {
     }
 
-    public Checkout(Long id, String userEmail, String checkoutDate, String returnDate, Book book, User user) {
+    public Review(Long id, String userEmail, Date date, int rating, String reviewDescription, Book book, User user) {
         this.id = id;
         this.userEmail = userEmail;
-        this.checkoutDate = checkoutDate;
-        this.returnDate = returnDate;
+        this.date = date;
+        this.rating = rating;
+        this.reviewDescription = reviewDescription;
         this.book = book;
         this.user = user;
     }
@@ -57,20 +67,28 @@ public class Checkout {
         this.userEmail = userEmail;
     }
 
-    public String getCheckoutDate() {
-        return checkoutDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setCheckoutDate(String checkoutDate) {
-        this.checkoutDate = checkoutDate;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public String getReturnDate() {
-        return returnDate;
+    public int getRating() {
+        return rating;
     }
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getReviewDescription() {
+        return reviewDescription;
+    }
+
+    public void setReviewDescription(String reviewDescription) {
+        this.reviewDescription = reviewDescription;
     }
 
     public Book getBook() {
@@ -91,11 +109,12 @@ public class Checkout {
 
     @Override
     public String toString() {
-        return "Checkout{" +
+        return "Review{" +
                 "id=" + id +
                 ", userEmail='" + userEmail + '\'' +
-                ", checkoutDate='" + checkoutDate + '\'' +
-                ", returnDate='" + returnDate + '\'' +
+                ", date=" + date +
+                ", rating=" + rating +
+                ", reviewDescription='" + reviewDescription + '\'' +
                 ", book=" + book +
                 ", user=" + user +
                 '}';
