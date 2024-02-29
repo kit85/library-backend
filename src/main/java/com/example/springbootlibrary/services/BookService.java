@@ -2,7 +2,7 @@ package com.example.springbootlibrary.services;
 
 import com.example.springbootlibrary.entity.Book;
 import com.example.springbootlibrary.repository.BookRepository;
-import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +29,9 @@ public class BookService {
     }
 
 
-
-
+    public List<Book> findBookByTitle(String title) {
+        return bookRepository.findByTitleContaining(title);
+    }
 
 
 

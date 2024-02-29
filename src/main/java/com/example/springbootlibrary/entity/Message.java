@@ -1,8 +1,9 @@
 package com.example.springbootlibrary.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+
 import jakarta.persistence.*;
+
+
 @Entity
 @Table(name="message")
 public class Message {
@@ -11,9 +12,8 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_email")
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
-
     @Column(name = "title")
     private String title;
 
@@ -29,8 +29,8 @@ public class Message {
     @Column(name = "closed")
     private boolean closed;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Message() {
@@ -110,18 +110,6 @@ public class Message {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", userEmail='" + userEmail + '\'' +
-                ", title='" + title + '\'' +
-                ", question='" + question + '\'' +
-                ", adminEmail='" + adminEmail + '\'' +
-                ", response='" + response + '\'' +
-                ", closed=" + closed +
-                ", user=" + user +
-                '}';
-    }
 }
+
+

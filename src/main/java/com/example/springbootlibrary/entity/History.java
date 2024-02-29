@@ -1,7 +1,7 @@
 package com.example.springbootlibrary.entity;
-import jakarta.persistence.*;
 
-import java.util.Arrays;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="history")
@@ -11,7 +11,7 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_email")
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
 
     @Column(name = "checkout_date")
@@ -30,16 +30,18 @@ public class History {
     private String description;
 
     @Lob
-    @Column(name = "img", columnDefinition = "MEDIUMBLOB" )
+    @Column(name="img", columnDefinition = "MEDIUMBLOB")
     private String img;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "email")
     private User user;
+
 
     public History() {
     }
@@ -136,21 +138,7 @@ public class History {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "History{" +
-                "id=" + id +
-                ", userEmail='" + userEmail + '\'' +
-                ", checkoutDate='" + checkoutDate + '\'' +
-                ", returnedDate='" + returnedDate + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", description='" + description + '\'' +
-                ", img='" + img + '\'' +
-                ", book=" + book +
-                ", user=" + user +
-                '}';
-    }
 }
+
+
 

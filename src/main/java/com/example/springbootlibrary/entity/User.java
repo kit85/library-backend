@@ -1,62 +1,82 @@
 package com.example.springbootlibrary.entity;
 
 import com.example.springbootlibrary.Enum.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-
+@Data
 @Entity
-public class User {
+@Table(name="user")
+@ToString
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="username", nullable = false )
+    private String username;
+
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
+
     @Column(name="email", unique = true)
     private String email;
 
     @Column(name="password", nullable = false)
+    @JsonIgnore
     private String password;
 
-    private String firstName;
-    private String lastName;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "Role", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Checkout> checkouts= new ArrayList<>();
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<History> histories =new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Book>books =new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Message> messages= new ArrayList<>();
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 
+    // Relationship
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Checkout> checkouts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Message> messages;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<History> histories;
+    //konstruktor
     public User() {
     }
 
-    public User(Long id, String email, String password, String firstName, String lastName, Role role, List<Checkout> checkouts, List<Review> reviews, List<History> histories, List<Book> books, List<Message> messages) {
-        this.id = id;
+    public User(String username, String lastname, String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.username = username;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.role = role;
-        this.checkouts = checkouts;
-        this.reviews = reviews;
-        this.histories = histories;
-        this.books = books;
-        this.messages = messages;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -67,6 +87,18 @@ public class User {
         this.id = id;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -75,28 +107,8 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public Role getRole() {
@@ -107,60 +119,53 @@ public class User {
         this.role = role;
     }
 
-    public List<Checkout> getCheckouts() {
-        return checkouts;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCheckouts(List<Checkout> checkouts) {
-        this.checkouts = checkouts;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public List<History> getHistories() {
-        return histories;
-    }
-
-    public void setHistories(List<History> histories) {
-        this.histories = histories;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", role=" + role +
-                ", checkouts=" + checkouts +
-                ", reviews=" + reviews +
-                ", histories=" + histories +
-                ", books=" + books +
-                ", messages=" + messages +
-                '}';
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

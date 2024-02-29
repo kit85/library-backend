@@ -1,27 +1,53 @@
 package com.example.springbootlibrary.entity;
+
+
+
 import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name="book")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name="id", nullable = false)
     private Long id;
-    @Column(name="title")
+
+    @Column(name="title", nullable = false)
     private String title;
-    @Column(name= "author")
+
+    @Column(name= "author", nullable = false)
     private String author;
-    @Column(name="description")
+
+    @Column(name="description", nullable = false)
     private String description;
-    @Column(name="copies")
+
+    @Column(name="copies", nullable = false)
     private int copies;
-    @Column(name="copies_available")
+
+    @Column(name="copies_available", nullable = false)
     private int copiesAvailable;
-    @Column(name = "category")
+
+    @Column(name = "category", nullable = false)
     private String category;
-    @Column(name="img")
+
+    @Lob
+    @Column(name="img", columnDefinition = "MEDIUMBLOB")
     private String img;
+
+    // Relationship
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Checkout> checkouts;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<History> histories;
+
+    public Book() {
+    }
 
     public Book(Long id, String title, String author, String description, int copies, int copiesAvailable, String category, String img) {
         this.id = id;
@@ -32,10 +58,6 @@ public class Book {
         this.copiesAvailable = copiesAvailable;
         this.category = category;
         this.img = img;
-    }
-
-    public Book(){
-
     }
 
     public Long getId() {
@@ -100,19 +122,5 @@ public class Book {
 
     public void setImg(String img) {
         this.img = img;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", description='" + description + '\'' +
-                ", copies=" + copies +
-                ", copiesAvailable=" + copiesAvailable +
-                ", category='" + category + '\'' +
-                ", img='" + img + '\'' +
-                '}';
     }
 }

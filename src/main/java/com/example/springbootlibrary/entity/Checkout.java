@@ -1,33 +1,34 @@
 package com.example.springbootlibrary.entity;
 
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="checkout")
 public class Checkout {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_email")
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
 
-    @Column(name = "checkout_date")
+    @Column(name = "checkout_date", nullable = false)
     private String checkoutDate;
 
-    @Column(name = "return_date")
+    @Column(name = "return_date", nullable = false)
     private String returnDate;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
+    // Relationship
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id", nullable = false, referencedColumnName = "id")
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "email")
     private User user;
-
-
 
     public Checkout() {
     }
@@ -88,16 +89,11 @@ public class Checkout {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "Checkout{" +
-                "id=" + id +
-                ", userEmail='" + userEmail + '\'' +
-                ", checkoutDate='" + checkoutDate + '\'' +
-                ", returnDate='" + returnDate + '\'' +
-                ", book=" + book +
-                ", user=" + user +
-                '}';
-    }
 }
+
+
+
+
+
+
+

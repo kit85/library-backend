@@ -1,11 +1,13 @@
 package com.example.springbootlibrary.entity;
 
-import jakarta.persistence.*;
 
 import java.util.Date;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+
 import java.util.Date;
 
 @Entity
@@ -14,27 +16,30 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_email")
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
 
+
     @Column(name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date date;
 
     @Column(name = "rating")
     private int rating;
 
-    @Column(name = "review_description", columnDefinition = "text")
-    private String reviewDescription;
+   @Column(name = "review_description")
+   private String reviewDescription;
 
-    @ManyToOne
+    //relationship
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "email")
     private User user;
 
 
@@ -106,17 +111,6 @@ public class Review {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", userEmail='" + userEmail + '\'' +
-                ", date=" + date +
-                ", rating=" + rating +
-                ", reviewDescription='" + reviewDescription + '\'' +
-                ", book=" + book +
-                ", user=" + user +
-                '}';
-    }
 }
+
+
