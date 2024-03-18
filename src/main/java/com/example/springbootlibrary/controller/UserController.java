@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
-@CrossOrigin("http//localhost:3000")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
 
  private final AuthenticationService authenticationService;
