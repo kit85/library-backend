@@ -4,6 +4,8 @@ package com.example.springbootlibrary.entity;
 import java.util.Date;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,10 +21,6 @@ public class Review {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_email", nullable = false)
-    private String userEmail;
-
-
     @Column(name = "date")
     @CreationTimestamp
     private Date date;
@@ -34,21 +32,22 @@ public class Review {
    private String reviewDescription;
 
     //relationship
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", nullable = false)
+    @JsonIgnoreProperties("review")
     private Book book;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "email")
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private User user;
 
 
     public Review() {
     }
 
-    public Review(Long id, String userEmail, Date date, int rating, String reviewDescription, Book book, User user) {
+    public Review(Long id, Date date, int rating, String reviewDescription, Book book, User user) {
         this.id = id;
-        this.userEmail = userEmail;
         this.date = date;
         this.rating = rating;
         this.reviewDescription = reviewDescription;
@@ -64,13 +63,6 @@ public class Review {
         this.id = id;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
 
     public Date getDate() {
         return date;

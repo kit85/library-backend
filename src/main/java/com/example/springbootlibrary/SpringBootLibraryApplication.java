@@ -4,6 +4,7 @@ import com.example.springbootlibrary.Enum.Role;
 
 
 import com.example.springbootlibrary.config.PasswordConfig;
+import com.example.springbootlibrary.entity.Book;
 import com.example.springbootlibrary.entity.User;
 import com.example.springbootlibrary.repository.BookRepository;
 import com.example.springbootlibrary.repository.UserRepository;
@@ -57,21 +58,7 @@ public class SpringBootLibraryApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		//user
-		/*
-		if(userRepository.count() == 0) {
-			User user = new User();
-			user.setUsername("admin");
-			user.setLastname("admin");
-			user.setEmail("admin@gmail.com");
-			user.setPassword(passwordEncoder.encode("password"));
-			user.setRole(Role.ROLE_ADMIN);
-
-			userRepository.save(user);
-			logger.debug("Admin user created successfully.");
-		}
 		//book 1
-		/*
 		Book book1 = new Book();
 		book1.setId(1L);
 		book1.setTitle("Python");
@@ -90,16 +77,8 @@ public class SpringBootLibraryApplication implements CommandLineRunner {
 		bookRepository.save(book1);
 		Book book = bookRepository.findById(1L).orElseThrow(); // Hämta befintlig bok från databasen
 
-		/*
-		Review review1 = new Review();
-		review1.setBookId(book.getId()); // Ange bokens id i recensionen
-		review1.setUserEmail("souad@example.com");
-		review1.setRating(5);
-		review1.setReviewDescription("Great book!");
-		reviewRepository.save(review1); // Spara recensionen till databasen
 
-		 */
-		/*
+
 
 		//book 2
 		Book book2 = new Book();
@@ -118,7 +97,25 @@ public class SpringBootLibraryApplication implements CommandLineRunner {
 		book2.setImg(base64Img2);
 		bookRepository.save(book2);
 
-		 */
+
+		//book 2
+		Book book3 = new Book();
+		book3.setId(3L);
+		book3.setTitle("Machine Learning");
+		book3.setAuthor("kit");
+		book3.setDescription("Csharp which is written by Semir");
+		book3.setCopies(6);
+		book3.setCopiesAvailable(6);
+		book3.setCategory("machine learning");
+
+		String imgPath3 = "src/main/resources/images/machine.png";
+		Path imagePath3 = Paths.get(imgPath3);
+		byte[] imageData3 = Files.readAllBytes(imagePath3);
+		String base64Img3 = Base64.getEncoder().encodeToString(imageData3);
+		book3.setImg(base64Img3);
+		bookRepository.save(book3);
+
+
 
 
 	}

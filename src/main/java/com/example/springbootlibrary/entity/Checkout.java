@@ -3,6 +3,8 @@ package com.example.springbootlibrary.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name="checkout")
 public class Checkout {
@@ -16,24 +18,27 @@ public class Checkout {
     private String userEmail;
 
     @Column(name = "checkout_date", nullable = false)
-    private String checkoutDate;
+    private LocalDate checkoutDate;
 
     @Column(name = "return_date", nullable = false)
-    private String returnDate;
+    private LocalDate returnDate;
 
     // Relationship
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "book_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "email")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // Constructors, getters, setters
+    // ...
 
     public Checkout() {
     }
 
-    public Checkout(Long id, String userEmail, String checkoutDate, String returnDate, Book book, User user) {
+    public Checkout(Long id, String userEmail, LocalDate checkoutDate, LocalDate returnDate, Book book, User user) {
         this.id = id;
         this.userEmail = userEmail;
         this.checkoutDate = checkoutDate;
@@ -58,19 +63,19 @@ public class Checkout {
         this.userEmail = userEmail;
     }
 
-    public String getCheckoutDate() {
+    public LocalDate getCheckoutDate() {
         return checkoutDate;
     }
 
-    public void setCheckoutDate(String checkoutDate) {
+    public void setCheckoutDate(LocalDate checkoutDate) {
         this.checkoutDate = checkoutDate;
     }
 
-    public String getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(String returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 
